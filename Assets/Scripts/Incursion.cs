@@ -21,6 +21,8 @@ public class Incursion : MonoBehaviour
 
 	private Camera viewCamera;
 
+	private string targetCity;
+
 	private string renderContainerName = "RenderContainer";
 	private GameObject renderContainer;
 
@@ -28,7 +30,8 @@ public class Incursion : MonoBehaviour
 	{
 		viewCamera = Camera.main;
 
-		//viewCamera.orthographic = true;
+		targetCity = Manager.Instance.City;
+		Debug.Log(targetCity);
 
 		BuildMap();
 
@@ -89,10 +92,10 @@ public class Incursion : MonoBehaviour
 	{
 		GameObject locationMarker = Instantiate(markerPrefab, renderContainer.transform);
 
-		locationMarker.name = "Spotter";
+		locationMarker.name = string.Format("C_{0}", "Unique");
 
 		ArcGISLocationComponent location = locationMarker.AddComponent<ArcGISLocationComponent>();
-		location.Position = new LatLon(lat, lon, 100);
+		location.Position = new LatLon(lat, lon, alt);
 
 		return locationMarker;
 	}
@@ -110,7 +113,7 @@ public class Incursion : MonoBehaviour
 			var x = float.Parse(geom.SelectToken("x").ToString());
 			var y = float.Parse(geom.SelectToken("y").ToString());
 
-			CreateMarker(x, y, 0);
+			CreateMarker(y, x, 25);
 
 			yield return null;
 		}

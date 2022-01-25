@@ -95,6 +95,7 @@ namespace EsriPS.Toolkits
             WWWForm form = new WWWForm();
             form.AddField("where", whereClause);
             form.AddField("outFields", "*");
+            form.AddField("outSR", "4326");
             form.AddField("f", "json");
 
             var queryURL = $"{_serviceURL}/query";
