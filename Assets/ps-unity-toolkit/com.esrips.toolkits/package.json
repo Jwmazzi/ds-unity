@@ -1,0 +1,22 @@
+{
+  "name": "com.esrips.toolkits",
+  "version": "1.0.0",
+  "displayName": "EsriPS Toolkits",
+  "description": "Esri Professional Toolkits for Unity.",
+  "unity": "2019.1",
+  "dependencies": {
+  },
+  "keywords": [ "library", "utility", "geometry", "websocket", "restapi" ],
+  "author": {
+    "name": "Morakot Pilouk",
+    "email": "mpilouk@esri.com",
+    "url": "https://www.esri.com"
+  },
+  "samples": [
+    {
+      "displayName": "URP GDELT",
+      "description": "Demonstrating the Esri PS Toolkit with URP examples.",
+      "path": "Samples~/URP/GDELTScene"
+    }
+  ]
+ }
