@@ -59,19 +59,21 @@ public class Incursion : MonoBehaviour
 		//if (CheckLoad() < 5000)
 		//	return;
 
-		if (Manager.Instance.Objectives.Count > 0)
-        {
-			foreach (GameObject enemy in Manager.Instance.Enemies)
-			{
-				NavMeshAgent enemyAgent = enemy.GetComponent(typeof(NavMeshAgent)) as NavMeshAgent;
+		var manager = Manager.Instance;
 
-				if (enemyAgent != null)
+        if (manager.Objectives.Count > 0)
+        {
+            foreach (GameObject enemy in Manager.Instance.Enemies)
+            {
+                NavMeshAgent enemyAgent = enemy.GetComponent(typeof(NavMeshAgent)) as NavMeshAgent;
+
+                if (enemyAgent != null)
                 {
                     if (!enemyAgent.hasPath)
                         enemyAgent.SetDestination(Manager.Instance.Objectives[0].transform.position);
                 }
-			}
-		}
+            }
+        }
     }
 
     private void BuildMap()
@@ -108,7 +110,7 @@ public class Incursion : MonoBehaviour
 		//cameraGameObject.AddComponent<ArcGISRebaseComponent>();
 
 		locationComponent.Position = new LatLon(Latitude, Longitude, Altitude);
-		locationComponent.Rotation = new Rotator(0, 0, 0);
+		locationComponent.Rotation = new Rotator(0, 45, 0);
 
 		var rendererGameObject = new GameObject(renderContainerName);
 		rendererGameObject.AddComponent<ArcGISRendererComponent>();
@@ -172,12 +174,6 @@ public class Incursion : MonoBehaviour
 			var y = float.Parse(geom.SelectToken("y").ToString());
 
 			GameObject enemy = CreateMarker("Enemy", y, x, 100, enemyPrefab);
-
-			NavMeshAgent enemyAgent = enemy.AddComponent(typeof(NavMeshAgent)) as NavMeshAgent;
-
-			//NavMeshAgent nma = new NavMeshAgent();
-			//enemy.AddComponent(nma);
-
 
 			Manager.Instance.Enemies.Add(enemy);
 

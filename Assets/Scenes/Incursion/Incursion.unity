@@ -236,7 +236,6 @@ GameObject:
   m_Component:
   - component: {fileID: 421950650}
   - component: {fileID: 421950649}
-  - component: {fileID: 421950651}
   m_Layer: 0
   m_Name: Launch
   m_TagString: Untagged
@@ -256,8 +255,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e8f4069ced6a449b0ee8a3d2a2a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Longitude: -73.9931
-  Latitude: 40.751022
+  Longitude: -73.9956
+  Latitude: 40.7471
   Altitude: 1000
   cameraPrefab: {fileID: 7671166928812593851, guid: 55ae72ec4ff1809428faca487324a153, type: 3}
   cameraURL: https://services1.arcgis.com/BteRGjYsGtVEXzaX/arcgis/rest/services/NYC_OSM_Cameras/FeatureServer/0
@@ -281,20 +280,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &421950651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 421950648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a114bc18fa739b74491b47023e18642c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  surfaces:
-  - {fileID: 23344630}
 --- !u!1 &437733214
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,6 +312,7 @@ MonoBehaviour:
   City: 
   Enemies: []
   Objectives: []
+  objects: 0
 --- !u!4 &437733216
 Transform:
   m_ObjectHideFlags: 0
@@ -369,7 +355,7 @@ Transform:
   m_GameObject: {fileID: 1219299851}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 250, y: 250, z: 250}
+  m_LocalScale: {x: 250, y: 0, z: 250}
   m_Children: []
   m_Father: {fileID: 23344629}
   m_RootOrder: 0
@@ -395,7 +381,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1219299851}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -554,8 +540,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 700
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
