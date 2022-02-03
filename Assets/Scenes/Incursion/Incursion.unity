@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: c730d779c24db2248a1f3e7a5d1d69ac, type: 2}
 --- !u!1 &23344628
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,8 +200,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInitialized: 0
   position:
-    Latitude: 40.7812
-    Longitude: -73.9665
+    Latitude: 40.759736
+    Longitude: -73.989586
     Altitude: 100
   rotation:
     Heading: 0
@@ -256,10 +256,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e8f4069ced6a449b0ee8a3d2a2a80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Longitude: -73.94792
-  Latitude: 40.79028
-  Altitude: 500
-  markerPrefab: {fileID: 7671166928812593851, guid: 55ae72ec4ff1809428faca487324a153, type: 3}
+  Longitude: -73.9931
+  Latitude: 40.751022
+  Altitude: 1000
+  cameraPrefab: {fileID: 7671166928812593851, guid: 55ae72ec4ff1809428faca487324a153, type: 3}
+  cameraURL: https://services1.arcgis.com/BteRGjYsGtVEXzaX/arcgis/rest/services/NYC_OSM_Cameras/FeatureServer/0
+  objectivePrefab: {fileID: 1881404978251106308, guid: 5e0809180562bda46b6ad46811a79f03, type: 3}
+  objectiveURL: https://services1.arcgis.com/BteRGjYsGtVEXzaX/arcgis/rest/services/Incursion_Objects/FeatureServer/0
+  enemyPrefab: {fileID: 1843802932597751447, guid: ef417453dce750642bb59555b965aed3, type: 3}
+  enemeyURL: https://services1.arcgis.com/BteRGjYsGtVEXzaX/arcgis/rest/services/Incursion_Objects/FeatureServer/1
+  firePrefab: {fileID: 8169756167253386880, guid: 56c42111df1b57c4f835ecee431d665c, type: 3}
+  fireURL: https://services1.arcgis.com/BteRGjYsGtVEXzaX/arcgis/rest/services/Incursion_Objects/FeatureServer/2
 --- !u!4 &421950650
 Transform:
   m_ObjectHideFlags: 0
@@ -318,6 +325,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   City: 
+  Enemies: []
+  Objectives: []
 --- !u!4 &437733216
 Transform:
   m_ObjectHideFlags: 0
@@ -349,7 +358,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1219299852
 Transform:
@@ -360,7 +369,7 @@ Transform:
   m_GameObject: {fileID: 1219299851}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalScale: {x: 250, y: 250, z: 250}
   m_Children: []
   m_Father: {fileID: 23344629}
   m_RootOrder: 0

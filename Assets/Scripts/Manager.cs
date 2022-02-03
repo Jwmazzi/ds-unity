@@ -9,6 +9,11 @@ public class Manager : MonoBehaviour
 
     public string City;
 
+    public List<GameObject> Enemies;
+    public List<GameObject> Objectives;
+
+    public int objects;
+
     private void Awake()
     {
         if (Instance != null)

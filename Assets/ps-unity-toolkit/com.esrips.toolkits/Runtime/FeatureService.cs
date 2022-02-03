@@ -90,7 +90,7 @@ namespace EsriPS.Toolkits
         /// <param name="whereClause"></param>
         /// <param name="respHandler"></param>
         /// <returns>IEnumerator</returns>
-        public IEnumerator RequestFeaturesCR(string whereClause, ResponseHandler respHandler)
+        public IEnumerator RequestFeatures(string whereClause, ResponseHandler respHandler, GameObject prefab)
         {
             WWWForm form = new WWWForm();
             form.AddField("where", whereClause);
@@ -110,12 +110,12 @@ namespace EsriPS.Toolkits
                 }
                 else
                 {
-                    yield return respHandler(www.downloadHandler.text);
+                    yield return respHandler(www.downloadHandler.text, prefab);
                 }
             }
         }
 
-        public delegate IEnumerator ResponseHandler(string responseText);
+        public delegate IEnumerator ResponseHandler(string responseText, GameObject prefab);
 
         /// <summary>method <c>UpdateFeatures</c> update features on a feature service.
         /// </summary>

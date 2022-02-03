@@ -13,17 +13,17 @@ public class NavMeshBaker : MonoBehaviour
 
     private void LateUpdate()
     {
-        UpdateTargets();
+        //UpdateTargets();
 
-        if (totalHits > 1000 && built == false)
-        {
-            for (int i = 0; i < surfaces.Length; i++)
-            {
-                surfaces[i].BuildNavMesh();
-            }
+        //if (totalHits > 1000 && built == false)
+        //{
+        //    for (int i = 0; i < surfaces.Length; i++)
+        //    {
+        //        surfaces[i].BuildNavMesh();
+        //    }
 
-            built = true;
-        }
+        //    built = true;
+        //}
     }
 
     private void UpdateTargets()
