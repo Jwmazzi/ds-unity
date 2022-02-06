@@ -56,10 +56,10 @@ public class Incursion : MonoBehaviour
 
     private void Update()
     {
-		//if (CheckLoad() < 5000)
-		//	return;
+        if (CheckLoad() < 1000)
+            return;
 
-		var manager = Manager.Instance;
+        var manager = Manager.Instance;
 
         if (manager.Objectives.Count > 0)
         {
@@ -69,7 +69,9 @@ public class Incursion : MonoBehaviour
 
                 if (enemyAgent != null)
                 {
-                    if (!enemyAgent.hasPath)
+					enemyAgent.enabled = true;
+
+                    if (enemyAgent.hasPath == false)
                         enemyAgent.SetDestination(Manager.Instance.Objectives[0].transform.position);
                 }
             }
@@ -84,16 +86,16 @@ public class Incursion : MonoBehaviour
 
 		arcGISMap.Basemap = new Esri.GameEngine.Map.ArcGISBasemap("https://www.arcgis.com/sharing/rest/content/items/8d569fbc4dc34f68abae8d72178cee05/data", "");
 
-		var extentCenter = new ArcGISPosition(Longitude, Latitude, Altitude, Esri.ArcGISRuntime.Geometry.SpatialReference.WGS84());
-		var extent = new ArcGISExtentCircle(extentCenter, 100000);
-		try
-		{
-			arcGISMap.ClippingArea = extent;
-		}
-		catch (Exception e)
-		{
-			Debug.Log(e.Message);
-		}
+		//var extentCenter = new ArcGISPosition(Longitude, Latitude, Altitude, Esri.ArcGISRuntime.Geometry.SpatialReference.WGS84());
+		//var extent = new ArcGISExtentCircle(extentCenter, 100000);
+		//try
+		//{
+		//	arcGISMap.ClippingArea = extent;
+		//}
+		//catch (Exception e)
+		//{
+		//	Debug.Log(e.Message);
+		//}
 
 		var buildings = new Esri.GameEngine.Layers.ArcGIS3DModelLayer("https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_NewYork_17/SceneServer", "Buildings", 1.0f, true, "");
 		arcGISMap.Layers.Add(buildings);
@@ -106,11 +108,11 @@ public class Incursion : MonoBehaviour
 		var cameraGameObject = Camera.main.gameObject;
 		var cameraComponent = cameraGameObject.AddComponent<ArcGISCameraComponent>();
 		var locationComponent = cameraGameObject.AddComponent<ArcGISLocationComponent>();
-		cameraGameObject.AddComponent<ArcGISCameraControllerComponent>();
-		//cameraGameObject.AddComponent<ArcGISRebaseComponent>();
+        cameraGameObject.AddComponent<ArcGISCameraControllerComponent>();
+        //cameraGameObject.AddComponent<ArcGISRebaseComponent>();
 
-		locationComponent.Position = new LatLon(Latitude, Longitude, Altitude);
-		locationComponent.Rotation = new Rotator(0, 45, 0);
+        locationComponent.Position = new LatLon(Latitude, Longitude, Altitude);
+		locationComponent.Rotation = new Rotator(0, 65, 0);
 
 		var rendererGameObject = new GameObject(renderContainerName);
 		rendererGameObject.AddComponent<ArcGISRendererComponent>();
@@ -173,9 +175,14 @@ public class Incursion : MonoBehaviour
 			var x = float.Parse(geom.SelectToken("x").ToString());
 			var y = float.Parse(geom.SelectToken("y").ToString());
 
-			GameObject enemy = CreateMarker("Enemy", y, x, 100, enemyPrefab);
+			GameObject enemy = CreateMarker("Enemy", y, x, 0, enemyPrefab);
 
-			Manager.Instance.Enemies.Add(enemy);
+            //NavMeshAgent enemyAgent = enemy.GetComponent(typeof(NavMeshAgent)) as NavMeshAgent;
+
+            //if (enemyAgent != null)
+            //    enemyAgent.updatePosition = false;
+
+            Manager.Instance.Enemies.Add(enemy);
 
 			yield return null;
 		}
