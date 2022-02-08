@@ -29,12 +29,16 @@ public class Incursion : MonoBehaviour
 	public GameObject firePrefab;
 	public string fireURL;
 
+	public GameObject barrierPrefab;
+
 	private Camera viewCamera;
 
 	private string targetCity;
 
 	private string renderContainerName = "RenderContainer";
 	private GameObject renderContainer;
+
+	private List<string> adjustedObjects = new List<string>();
 
 	private void Start()
 	{
@@ -56,10 +60,10 @@ public class Incursion : MonoBehaviour
 
     private void Update()
     {
-        if (CheckLoad() < 1000)
+		if (CheckLoad() < 1000)
             return;
 
-        var manager = Manager.Instance;
+		var manager = Manager.Instance;
 
         if (manager.Objectives.Count > 0)
         {
@@ -76,6 +80,20 @@ public class Incursion : MonoBehaviour
                 }
             }
         }
+
+		if (Input.GetMouseButtonDown(0))
+        {
+			RaycastHit hit;
+			Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
+
+			// TODO - Cooldown
+
+			if (Physics.Raycast(ray, out hit))
+            {
+				Instantiate(barrierPrefab, hit.point, Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(0, 360), 0)), renderContainer.transform);
+            }
+        }
+
     }
 
     private void BuildMap()
@@ -102,7 +120,7 @@ public class Incursion : MonoBehaviour
 
 		var arcGISMapViewComponent = gameObject.AddComponent<ArcGISMapViewComponent>();
 
-		arcGISMapViewComponent.Position = new LatLon(Latitude, Longitude, 0);
+		arcGISMapViewComponent.Position = new LatLon(Latitude, Longitude, 15);
 		arcGISMapViewComponent.ViewMode = viewMode;
 
 		var cameraGameObject = Camera.main.gameObject;
@@ -205,6 +223,23 @@ public class Incursion : MonoBehaviour
 			Manager.Instance.Objectives.Add(objective);
 
 			yield return null;
+		}
+	}
+
+	private void HandleSceneMeshes()
+    {
+		Transform[] allChildren = renderContainer.transform.GetComponentsInChildren<Transform>();
+
+		for (int i = 0; i < allChildren.Length; i++)
+        {
+			GameObject go = allChildren[i].gameObject;
+			MeshCollider mc = go.GetComponent(typeof(MeshCollider)) as MeshCollider;
+
+			if (mc == null)
+			{
+				MeshCollider newMeshCollider = go.AddComponent(typeof(MeshCollider)) as MeshCollider;
+				newMeshCollider.convex = true;
+			}
 		}
 	}
 

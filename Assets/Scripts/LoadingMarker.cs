@@ -5,6 +5,8 @@ using TMPro;
 
 public class LoadingMarker : MonoBehaviour
 {
+    public string Running;
+
     // Start is called before the first frame update
     void OnMouseOver()
     {
