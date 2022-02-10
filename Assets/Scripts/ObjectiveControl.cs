@@ -4,20 +4,21 @@ using UnityEngine;
 
 public class ObjectiveControl : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.tag);
+        // Provided the Scene has been loaded, if an Enemy hits this Objective, signal to the client that this Objective
+        // has been destroyed. TODO - Push update back to AGOL for Dashboard.
+        if (Manager.Instance.IncursionReady)
+        {
+            if (other.tag == "Enemy")
+            {
+                var targetPS = transform.gameObject.GetComponentInChildren<ParticleSystem>();
+                var main = targetPS.main;
+                main.startColor = Color.red;
+
+                var targetLight = transform.gameObject.GetComponentInChildren<Light>();
+                targetLight.enabled = false;
+            }
+        }
     }
 }

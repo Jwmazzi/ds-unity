@@ -10,6 +10,7 @@ using System;
 using EsriPS.Toolkits;
 using Newtonsoft.Json.Linq;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Incursion : MonoBehaviour
 {
@@ -38,6 +39,8 @@ public class Incursion : MonoBehaviour
 	private string renderContainerName = "RenderContainer";
 	private GameObject renderContainer;
 
+	public Image img;
+
 	private List<string> adjustedObjects = new List<string>();
 
 	private void Start()
@@ -60,10 +63,16 @@ public class Incursion : MonoBehaviour
 
     private void Update()
     {
+		//HandleSceneMeshes();
+
 		if (CheckLoad() < 1000)
             return;
 
+		//StartCoroutine(RemoveLoad());
+
 		var manager = Manager.Instance;
+
+		manager.IncursionReady = true;
 
         if (manager.Objectives.Count > 0)
         {
@@ -226,21 +235,47 @@ public class Incursion : MonoBehaviour
 		}
 	}
 
-	private void HandleSceneMeshes()
+	IEnumerator RemoveLoad()
     {
-		Transform[] allChildren = renderContainer.transform.GetComponentsInChildren<Transform>();
-
-		for (int i = 0; i < allChildren.Length; i++)
+		for (float i = 1; i >= 0; i -= Time.deltaTime)
         {
-			GameObject go = allChildren[i].gameObject;
-			MeshCollider mc = go.GetComponent(typeof(MeshCollider)) as MeshCollider;
-
-			if (mc == null)
-			{
-				MeshCollider newMeshCollider = go.AddComponent(typeof(MeshCollider)) as MeshCollider;
-				newMeshCollider.convex = true;
-			}
+			img.color = new Color(1, 1, 1, i);
+			yield return null;
 		}
 	}
+
+	//private void HandleSceneMeshes()
+ //   {
+	//	Transform[] allChildren = renderContainer.transform.GetComponentsInChildren<Transform>();
+
+	//	for (int i = 0; i < allChildren.Length; i++)
+ //       {
+	//		GameObject go = allChildren[i].gameObject;
+
+	//		if (go.name.Contains("ArcGIS"))
+	//		{
+	//			MeshCollider mc = go.GetComponent(typeof(MeshCollider)) as MeshCollider;
+
+	//			if (mc == null)
+	//			{
+	//				MeshCollider newMeshCollider = go.AddComponent(typeof(MeshCollider)) as MeshCollider;
+ //                   newMeshCollider.convex = true;
+ //               }
+
+	//			Rigidbody rb = go.GetComponent(typeof(Rigidbody)) as Rigidbody;
+
+	//			if (rb == null)
+	//			{
+	//				Rigidbody rigidbody = go.AddComponent(typeof(Rigidbody)) as Rigidbody;
+	//				rigidbody.useGravity = false;
+	//				rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+											
+
+	//			}
+
+	//		}
+
+	//	}
+	//}
 
 }

@@ -14,6 +14,8 @@ public class Manager : MonoBehaviour
 
     public int objects;
 
+    public bool IncursionReady;
+
     private void Awake()
     {
         if (Instance != null)
