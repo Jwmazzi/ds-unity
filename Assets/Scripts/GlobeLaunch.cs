@@ -25,13 +25,15 @@ public class GlobeLaunch : MonoBehaviour
 	private string renderContainerName = "AGSContainer";
 	private GameObject renderContainer;
 
+	private ArcGISMapViewComponent mapViewComponent;
+
 	void Start()
 	{
 		BuildGlobe();
 
 		var gdeltFS = new FeatureService(locationURL);
 
-		StartCoroutine(gdeltFS.RequestFeaturesCR("1=1", SetMarkers));
+		StartCoroutine(gdeltFS.RequestFeatures("1=1", SetMarkers, locationPrefab));
 	}
 
 	void BuildGlobe()
@@ -45,6 +47,7 @@ public class GlobeLaunch : MonoBehaviour
 		var arcGISMapViewComponent = gameObject.AddComponent<ArcGISMapViewComponent>();
 		arcGISMapViewComponent.Position = new LatLon(Latitude, Longitude, Altitude);
 		arcGISMapViewComponent.ViewMode = viewMode;
+		mapViewComponent = arcGISMapViewComponent;
 
 		var cameraGameObject = Camera.main.gameObject;
 		cameraGameObject.AddComponent<ArcGISCameraComponent>();
@@ -65,7 +68,7 @@ public class GlobeLaunch : MonoBehaviour
 		arcGISMapViewComponent.RendererView.Map = arcGISMap;
 	}
 
-	private GameObject CreateMarker(string name, float lat, float lon, float alt)
+	private GameObject CreateMarker(string name, float lat, float lon, float alt, GameObject prefab)
 	{
 		GameObject locationMarker = Instantiate(locationPrefab, renderContainer.transform);
 
@@ -77,7 +80,7 @@ public class GlobeLaunch : MonoBehaviour
 		return locationMarker;
 	}
 
-	IEnumerator SetMarkers(string dataString)
+	IEnumerator SetMarkers(string dataString, GameObject prefab)
 	{
 		var results = JObject.Parse(dataString);
 		var features = results["features"].Children();
@@ -94,16 +97,65 @@ public class GlobeLaunch : MonoBehaviour
 			var actor1name = string.Format("{0}-A1-{1}", gi, a1);
 			var actor1lat = (float)attributes.SelectToken("actor1geo_lat");
 			var actor1lon = (float)attributes.SelectToken("actor1geo_long");
-			CreateMarker(actor1name, actor1lat, actor1lon, 0);
+			GameObject g1 = CreateMarker(actor1name, actor1lat, actor1lon, 0, prefab);
 
 			// Actor 2
 			var a2 = attributes.SelectToken("actor2name").ToString();
 			var actor2name = string.Format("{0}-A2-{1}", gi, a2);
 			var actor2lat = (float)attributes.SelectToken("actor2geo_lat");
 			var actor2lon = (float)attributes.SelectToken("actor2geo_long");
-			CreateMarker(actor2name, actor2lat, actor2lon, 0);
+			GameObject g2 = CreateMarker(actor2name, actor2lat, actor2lon, 0, prefab);
 
 			yield return null;
 		}
+	}
+
+	private Vector3 GenerateBezier(Vector3 start, Vector3 mid, Vector3 end, float t)
+	{
+		return Vector3.Lerp(Vector3.Lerp(start, mid, t), Vector3.Lerp(mid, end, t), t);
+	}
+
+	public void BuildArc(GameObject s, GameObject e)
+    {
+		var sLoc = s.GetComponent(typeof(ArcGISLocationComponent)) as ArcGISLocationComponent;
+		var eLoc = e.GetComponent(typeof(ArcGISLocationComponent)) as ArcGISLocationComponent;
+
+		float sLon = (float)sLoc.Position.Longitude;
+		float sLat = (float)sLoc.Position.Latitude;
+		Vector3 sV = sLoc.transform.position;
+
+		float eLon = (float)eLoc.Position.Longitude;
+		float eLat = (float)eLoc.Position.Latitude;
+		Vector3 eV = eLoc.transform.position;
+
+		float midLat = (eLat + sLat) / 2;
+		float midLon = (eLon + sLon) / 2;
+
+		var line = new GameObject("arcLine");
+		line.transform.SetParent(renderContainer.transform, false);
+		var lineRenderer = line.AddComponent<LineRenderer>();
+		lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+		lineRenderer.widthMultiplier = 10000;
+		lineRenderer.positionCount = 100;
+
+		var peak = new GameObject("arcPeak");
+		var midLocation = peak.AddComponent<ArcGISLocationComponent>();
+		peak.transform.SetParent(renderContainer.transform, false);
+		midLocation.Position = new LatLon(midLat, midLon, 5000);
+
+		Vector3 midV = midLocation.transform.position;
+
+		float xDif = midV.x - sV.x;
+		float yDif = midV.y - sV.y;
+		float zDif = midV.z - sV.z;
+
+		var points = new Vector3[100];
+		for (int i = 0; i < points.Length; i++)
+		{
+			var x = GenerateBezier(sV, midV, eV, (float)((float)i / (float)points.Length));
+			points[i] = x;
+		}
+
+		lineRenderer.SetPositions(points);
 	}
 }

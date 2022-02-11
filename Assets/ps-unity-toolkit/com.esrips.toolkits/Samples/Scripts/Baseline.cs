@@ -36,7 +36,7 @@ public class Baseline : MonoBehaviour
 
 		var gdeltFS = new FeatureService("https://services9.arcgis.com/q5uyFfTZo3LFL04P/ArcGIS/rest/services/GDELT_V2/FeatureServer/0");
 
-        StartCoroutine(gdeltFS.RequestFeaturesCR("1=1", SetMarkers));
+        StartCoroutine(gdeltFS.RequestFeatures("1=1", SetMarkers, markerPrefab));
     }
 
     void BuildMap()
@@ -72,9 +72,9 @@ public class Baseline : MonoBehaviour
 		arcGISMapViewComponent.RendererView.Map = arcGISMap;
 	}
 
-	private GameObject CreateMarker(string name, float lat, float lon, float alt)
+	private GameObject CreateMarker(string name, float lat, float lon, float alt, GameObject prefab)
     {
-		GameObject locationMarker = Instantiate(markerPrefab, renderContainer.transform);
+		GameObject locationMarker = Instantiate(prefab, renderContainer.transform);
 
 		locationMarker.name = name;
 
@@ -84,7 +84,7 @@ public class Baseline : MonoBehaviour
 		return locationMarker;
 	}
 
-	IEnumerator SetMarkers(string dataString)
+	IEnumerator SetMarkers(string dataString, GameObject markerPrefab)
     {
 		var results = JObject.Parse(dataString);
 		var features = results["features"].Children();
@@ -101,14 +101,14 @@ public class Baseline : MonoBehaviour
 			var actor1name = string.Format("{0}-A1-{1}", gi, a1);
 			var actor1lat = (float)attributes.SelectToken("actor1geo_lat");
 			var actor1lon = (float)attributes.SelectToken("actor1geo_long");
-			CreateMarker(actor1name, actor1lat, actor1lon, 0);
+			CreateMarker(actor1name, actor1lat, actor1lon, 0, markerPrefab);
 
 			// Actor 2
 			var a2 = attributes.SelectToken("actor2name").ToString();
 			var actor2name = string.Format("{0}-A2-{1}", gi, a2);
 			var actor2lat = (float)attributes.SelectToken("actor2geo_lat");
 			var actor2lon = (float)attributes.SelectToken("actor2geo_long");
-			CreateMarker(actor2name, actor2lat, actor2lon, 0);
+			CreateMarker(actor2name, actor2lat, actor2lon, 0, markerPrefab);
 
 			yield return null;
 		}

@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6576cd90f0c950649a8c708dba6a6ea1, type: 3}
+  m_Name: Camera
+  m_EditorClassIdentifier: 
+  MoveMode: 2
+  Move_NearScreenEdge: 0
+  ScreenBorder: 0
+  Can_Rotate: 1
+  Use_SpeedBoost: 0
+  Use_ForwardFacing: 0
+  ForwardBackwardInputName: Vertical
+  LeftRightInputName: Horizontal
+  MouseScrollWheelInputName: Mouse ScrollWheel
+  ZoomInKey: 120
+  ZoomOutKey: 122
+  DragKey: 324
+  RotateLeft: 101
+  RotateRight: 113
+  SpeedBoostKey: 304
+  Move_Speed: 0.4
+  Move_SpeedMulti: 1
+  Zoom_Speed: 0.5
+  Zoom_SpeedMulti: 1
+  Rotate_Speed: 1
+  Rotate_SpeedMulti: 1
+  BoostMove_SpeedMulti: 2
+  Height: 800
+  DownMax: -10000
+  UpMax: 10000
+  LeftMax: -10000
+  RightMax: 10000
+  ZoomMin: 0
+  ZoomMax: 100
+  OrthNearPlane: -10000
+  OrthFarPlane: 10000
+  FOVMin: 40
+  FOVMax: 60
+  PersNearPlane: 0.02
+  PersFarPlane: 100
+  ShowHelp: 0
+  currentTab: 0
+  TabStrings:
+  - Main
+  - Orthographic
+  - Perspective
+  - Inputs

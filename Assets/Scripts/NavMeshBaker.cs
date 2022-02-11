@@ -13,9 +13,9 @@ public class NavMeshBaker : MonoBehaviour
 
     private void LateUpdate()
     {
-        UpdateTargets();
+        //UpdateTargets();
 
-        if (totalHits > 1000 && built == false)
+        if (Manager.Instance.IncursionReady && built == false)
         {
             for (int i = 0; i < surfaces.Length; i++)
             {
@@ -24,6 +24,25 @@ public class NavMeshBaker : MonoBehaviour
 
             built = true;
         }
+
+        //if (CheckLoad() < 1000 && built == false)
+        //{
+        //    for (int i = 0; i < surfaces.Length; i++)
+        //    {
+        //        surfaces[i].BuildNavMesh();
+        //    }
+
+        //    built = true;
+        //}
+    }
+
+    private int CheckLoad()
+    {
+        var containerGameObject = GameObject.Find("RenderContainer");
+
+        Transform[] children = containerGameObject.transform.GetComponentsInChildren<Transform>();
+
+        return children.Length;
     }
 
     private void UpdateTargets()
@@ -36,6 +55,11 @@ public class NavMeshBaker : MonoBehaviour
         for (int i = 0; i < children.Length; i++)
         {
             GameObject go = children[i].gameObject;
+
+            //if (go.name.Contains("ArcGIS"))
+            //{
+            //    // What is inside this Mesh?
+            //}
 
             NavMeshObstacle nm = go.GetComponent(typeof(NavMeshObstacle)) as NavMeshObstacle;
 
