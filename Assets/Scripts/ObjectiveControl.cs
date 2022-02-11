@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ObjectiveControl : MonoBehaviour
 {
@@ -17,7 +18,19 @@ public class ObjectiveControl : MonoBehaviour
                 main.startColor = Color.red;
 
                 var targetLight = transform.gameObject.GetComponentInChildren<Light>();
-                targetLight.enabled = false;
+                targetLight.color = Color.red;
+
+                var tmps = transform.gameObject.GetComponentsInChildren<TextMeshProUGUI>();
+
+
+                foreach (var tmp in tmps)
+                {
+                    if (tmp.name == "ObjectiveDescription")
+                        tmp.text = $"This objective has been captured. There are {Manager.Instance.Objectives.Count - 1} objectives remaining!";
+                }
+
+                var enemyPS = other.transform.gameObject.GetComponentInChildren<ParticleSystem>();
+                enemyPS.Stop();
             }
         }
     }

@@ -11,6 +11,7 @@ using EsriPS.Toolkits;
 using Newtonsoft.Json.Linq;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using TMPro;
 
 public class Incursion : MonoBehaviour
 {
@@ -232,11 +233,21 @@ public class Incursion : MonoBehaviour
 		foreach (var f in features)
 		{
 			var geom = f.SelectToken("geometry");
+			var atts = f.SelectToken("attributes");
 
 			var x = float.Parse(geom.SelectToken("x").ToString());
 			var y = float.Parse(geom.SelectToken("y").ToString());
 
 			GameObject objective = CreateMarker("Objective", y, x, 25, objectivePrefab);
+
+			foreach (var tmp in transform.gameObject.GetComponentsInChildren<TextMeshProUGUI>())
+			{
+				if (tmp.name == "ObjectiveName")
+					tmp.SetText(atts.SelectToken("ObjectiveName").ToString());
+
+				if (tmp.name == "ObjectiveDescription")
+					tmp.SetText(atts.SelectToken("ObjectiveDescription").ToString());
+			}
 
 			Manager.Instance.Objectives.Add(objective);
 
