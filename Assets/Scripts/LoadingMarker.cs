@@ -5,7 +5,12 @@ using TMPro;
 
 public class LoadingMarker : MonoBehaviour
 {
-    public string Running;
+    public string globaleventid;
+    public string goldsteinscale;
+    public string category;
+    public string summary;
+    public string title;
+
 
     // Start is called before the first frame update
     void OnMouseOver()
@@ -28,10 +33,17 @@ public class LoadingMarker : MonoBehaviour
 
     private void UpdateUI(GameObject go)
     {
-        GameObject target = GameObject.Find("CityTarget");
-        TextMeshProUGUI tmp = target.GetComponent<TextMeshProUGUI>();
+        GameObject categoryGO = GameObject.Find("Category");
+        TextMeshProUGUI categoryTMP = categoryGO.GetComponent<TextMeshProUGUI>();
+        categoryTMP.text = category;
 
-        tmp.text = go.name;
+        GameObject titleGO = GameObject.Find("Title");
+        TextMeshProUGUI titleTMP = titleGO.GetComponent<TextMeshProUGUI>();
+        titleTMP.text = title;
+
+        GameObject summaryGO = GameObject.Find("Summary");
+        TextMeshProUGUI summaryTMP = summaryGO.GetComponent<TextMeshProUGUI>();
+        summaryTMP.text = summary;
     }
 
 }

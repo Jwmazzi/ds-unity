@@ -10,6 +10,7 @@ using Esri.GameEngine.Map;
 
 using UnityEngine.Networking;
 using UnityEngine;
+using TMPro;
 
 using EsriPS.Toolkits;
 
@@ -43,6 +44,7 @@ public class GlobeLaunch : MonoBehaviour
 		var arcGISMap = new ArcGISMap(viewMode);
 
 		arcGISMap.Basemap = ArcGISBasemap.CreateLightGrayCanvas();
+		//arcGISMap.Basemap = new Esri.GameEngine.Map.ArcGISBasemap("https://services.arcgisonline.com/arcgis/rest/services/Canvas/World_Dark_Gray_Base/MapServer", "AAPKff9b6add588e4aa2a8a3d64f6973bc6bLglVRf6iyQZTPkJ13AEwP8ia5TrZ8An9v-Xn3UeGSwnmpwhPpbshMSvT1JZiYBJU");
 
 		var arcGISMapViewComponent = gameObject.AddComponent<ArcGISMapViewComponent>();
 		arcGISMapViewComponent.Position = new LatLon(Latitude, Longitude, Altitude);
@@ -85,12 +87,19 @@ public class GlobeLaunch : MonoBehaviour
 		var results = JObject.Parse(dataString);
 		var features = results["features"].Children();
 
+		int idx = 0;
 		foreach (var f in features)
 		{
 			var attributes = f.SelectToken("attributes");
 
+			if (idx == 0)
+				Debug.Log(attributes);
+
 			// Unpack Common Properties
-			var gi = attributes.SelectToken("globaleventid").ToString();
+			var gi        = attributes.SelectToken("globaleventid").ToString();
+			var goldstien = attributes.SelectToken("goldsteinscale").ToString();
+			var category  = attributes.SelectToken("category").ToString();
+			var title   = attributes.SelectToken("title").ToString();
 
 			// Actor 1
 			var a1 = attributes.SelectToken("actor1name").ToString();
@@ -99,12 +108,18 @@ public class GlobeLaunch : MonoBehaviour
 			var actor1lon = (float)attributes.SelectToken("actor1geo_long");
 			GameObject g1 = CreateMarker(actor1name, actor1lat, actor1lon, 0, prefab);
 
-			// Actor 2
-			var a2 = attributes.SelectToken("actor2name").ToString();
-			var actor2name = string.Format("{0}-A2-{1}", gi, a2);
-			var actor2lat = (float)attributes.SelectToken("actor2geo_lat");
-			var actor2lon = (float)attributes.SelectToken("actor2geo_long");
-			GameObject g2 = CreateMarker(actor2name, actor2lat, actor2lon, 0, prefab);
+			g1.gameObject.GetComponent<LoadingMarker>().goldsteinscale = goldstien;
+			g1.gameObject.GetComponent<LoadingMarker>().category = category;
+			g1.gameObject.GetComponent<LoadingMarker>().title = title;
+
+			//// Actor 2
+			//var a2 = attributes.SelectToken("actor2name").ToString();
+			//var actor2name = string.Format("{0}-A2-{1}", gi, a2);
+			//var actor2lat = (float)attributes.SelectToken("actor2geo_lat");
+			//var actor2lon = (float)attributes.SelectToken("actor2geo_long");
+			//GameObject g2 = CreateMarker(actor2name, actor2lat, actor2lon, 0, prefab);
+
+			idx += 1;
 
 			yield return null;
 		}
