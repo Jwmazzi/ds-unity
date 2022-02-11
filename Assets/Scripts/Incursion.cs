@@ -30,6 +30,9 @@ public class Incursion : MonoBehaviour
 	public GameObject firePrefab;
 	public string fireURL;
 
+	public GameObject addressPrefab;
+	public string addressURL;
+
 	public GameObject barrierPrefab;
 
 	private Camera viewCamera;
@@ -59,13 +62,19 @@ public class Incursion : MonoBehaviour
 
 		var objectiveFS = new FeatureService($"{objectiveURL}\\query");
 		StartCoroutine(objectiveFS.RequestFeatures("1=1", HandleObjectvies, objectivePrefab));
+
+		//var addressFS = new FeatureService($"{addressURL}\\query");
+		//StartCoroutine(addressFS.RequestFeatures("1=1", HandleAddresses, addressPrefab));
+
+		var fireFS = new FeatureService($"{fireURL}\\query");
+		StartCoroutine(fireFS.RequestFeatures("1=1", HandleFires, firePrefab));
 	}
 
     private void Update()
     {
-		//HandleSceneMeshes();
+        //HandleSceneMeshes();
 
-		if (CheckLoad() < 1000)
+        if (CheckLoad() < 1000)
             return;
 
 		//StartCoroutine(RemoveLoad());
@@ -111,7 +120,7 @@ public class Incursion : MonoBehaviour
 		var viewMode = Esri.GameEngine.Map.ArcGISMapType.Local;
 		var arcGISMap = new Esri.GameEngine.Map.ArcGISMap(viewMode);
 
-		arcGISMap.Basemap = new Esri.GameEngine.Map.ArcGISBasemap("https://www.arcgis.com/sharing/rest/content/items/8d569fbc4dc34f68abae8d72178cee05/data", "");
+		//arcGISMap.Basemap = new Esri.GameEngine.Map.ArcGISBasemap("https://www.arcgis.com/sharing/rest/content/items/8d569fbc4dc34f68abae8d72178cee05/data", "");
 
 		//var extentCenter = new ArcGISPosition(Longitude, Latitude, Altitude, Esri.ArcGISRuntime.Geometry.SpatialReference.WGS84());
 		//var extent = new ArcGISExtentCircle(extentCenter, 100000);
@@ -235,6 +244,42 @@ public class Incursion : MonoBehaviour
 		}
 	}
 
+	IEnumerator HandleAddresses(string dataString, GameObject objectivePrefab)
+	{
+		var results = JObject.Parse(dataString);
+		var features = results["features"].Children();
+
+		foreach (var f in features)
+		{
+			var geom = f.SelectToken("geometry");
+
+			var x = float.Parse(geom.SelectToken("x").ToString());
+			var y = float.Parse(geom.SelectToken("y").ToString());
+
+			GameObject objective = CreateMarker("Addresses", y, x, 25, objectivePrefab);
+
+			yield return null;
+		}
+	}
+
+	IEnumerator HandleFires(string dataString, GameObject objectivePrefab)
+	{
+		var results = JObject.Parse(dataString);
+		var features = results["features"].Children();
+
+		foreach (var f in features)
+		{
+			var geom = f.SelectToken("geometry");
+
+			var x = float.Parse(geom.SelectToken("x").ToString());
+			var y = float.Parse(geom.SelectToken("y").ToString());
+
+			GameObject objective = CreateMarker("Fire", y, x, 25, objectivePrefab);
+
+			yield return null;
+		}
+	}
+
 	IEnumerator RemoveLoad()
     {
 		for (float i = 1; i >= 0; i -= Time.deltaTime)
@@ -244,38 +289,34 @@ public class Incursion : MonoBehaviour
 		}
 	}
 
-	//private void HandleSceneMeshes()
- //   {
-	//	Transform[] allChildren = renderContainer.transform.GetComponentsInChildren<Transform>();
+    private void HandleSceneMeshes()
+    {
+        Transform[] allChildren = renderContainer.transform.GetComponentsInChildren<Transform>();
 
-	//	for (int i = 0; i < allChildren.Length; i++)
- //       {
-	//		GameObject go = allChildren[i].gameObject;
+        for (int i = 0; i < allChildren.Length; i++)
+        {
+            GameObject go = allChildren[i].gameObject;
 
-	//		if (go.name.Contains("ArcGIS"))
-	//		{
-	//			MeshCollider mc = go.GetComponent(typeof(MeshCollider)) as MeshCollider;
+            if (go.name.Contains("ArcGIS"))
+            {
+                MeshCollider mc = go.GetComponent(typeof(MeshCollider)) as MeshCollider;
+                if (mc == null)
+                {
+                    MeshCollider newMeshCollider = go.AddComponent(typeof(MeshCollider)) as MeshCollider;
+                    newMeshCollider.convex = true;
+					newMeshCollider.isTrigger = true;
+                }
 
-	//			if (mc == null)
-	//			{
-	//				MeshCollider newMeshCollider = go.AddComponent(typeof(MeshCollider)) as MeshCollider;
- //                   newMeshCollider.convex = true;
- //               }
+                Rigidbody rb = go.GetComponent(typeof(Rigidbody)) as Rigidbody;
+                if (rb == null)
+                {
+                    Rigidbody rigidbody = go.AddComponent(typeof(Rigidbody)) as Rigidbody;
+                    rigidbody.useGravity = false;
+                    rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                }
+            }
 
-	//			Rigidbody rb = go.GetComponent(typeof(Rigidbody)) as Rigidbody;
-
-	//			if (rb == null)
-	//			{
-	//				Rigidbody rigidbody = go.AddComponent(typeof(Rigidbody)) as Rigidbody;
-	//				rigidbody.useGravity = false;
-	//				rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-											
-
-	//			}
-
-	//		}
-
-	//	}
-	//}
+        }
+    }
 
 }

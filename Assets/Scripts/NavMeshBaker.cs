@@ -13,9 +13,9 @@ public class NavMeshBaker : MonoBehaviour
 
     private void LateUpdate()
     {
-        UpdateTargets();
+        //UpdateTargets();
 
-        if (CheckLoad() < 1000 && built == false)
+        if (Manager.Instance.IncursionReady && built == false)
         {
             for (int i = 0; i < surfaces.Length; i++)
             {
@@ -24,6 +24,16 @@ public class NavMeshBaker : MonoBehaviour
 
             built = true;
         }
+
+        //if (CheckLoad() < 1000 && built == false)
+        //{
+        //    for (int i = 0; i < surfaces.Length; i++)
+        //    {
+        //        surfaces[i].BuildNavMesh();
+        //    }
+
+        //    built = true;
+        //}
     }
 
     private int CheckLoad()
@@ -46,19 +56,19 @@ public class NavMeshBaker : MonoBehaviour
         {
             GameObject go = children[i].gameObject;
 
-            if (go.name.Contains("ArcGIS"))
-            {
-                // What is inside this Mesh?
-            }
-
-            //NavMeshObstacle nm = go.GetComponent(typeof(NavMeshObstacle)) as NavMeshObstacle;
-
-            //if (nm == null)
+            //if (go.name.Contains("ArcGIS"))
             //{
-            //    hits = hits + 1;
-            //    NavMeshObstacle newModifier = go.AddComponent(typeof(NavMeshObstacle)) as NavMeshObstacle;
-            //    newModifier.carving = true;
+            //    // What is inside this Mesh?
             //}
+
+            NavMeshObstacle nm = go.GetComponent(typeof(NavMeshObstacle)) as NavMeshObstacle;
+
+            if (nm == null)
+            {
+                hits = hits + 1;
+                NavMeshObstacle newModifier = go.AddComponent(typeof(NavMeshObstacle)) as NavMeshObstacle;
+                newModifier.carving = true;
+            }
         }
 
         Debug.Log("Hits: " + hits);

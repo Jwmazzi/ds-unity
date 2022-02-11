@@ -287,8 +287,10 @@ MonoBehaviour:
   objectiveURL: https://services1.arcgis.com/BteRGjYsGtVEXzaX/arcgis/rest/services/Incursion_Objects/FeatureServer/0
   enemyPrefab: {fileID: 1843802932597751447, guid: ef417453dce750642bb59555b965aed3, type: 3}
   enemeyURL: https://services1.arcgis.com/BteRGjYsGtVEXzaX/arcgis/rest/services/Incursion_Objects/FeatureServer/1
-  firePrefab: {fileID: 8169756167253386880, guid: 56c42111df1b57c4f835ecee431d665c, type: 3}
+  firePrefab: {fileID: 3148597446230129946, guid: bb3d850c1094d9a40b45c46689b98ae2, type: 3}
   fireURL: https://services1.arcgis.com/BteRGjYsGtVEXzaX/arcgis/rest/services/Incursion_Objects/FeatureServer/2
+  addressPrefab: {fileID: 5962314549785449318, guid: 8d8a6dd0f2bf8dc4ab0da2a69e8e6486, type: 3}
+  addressURL: https://services1.arcgis.com/BteRGjYsGtVEXzaX/arcgis/rest/services/NYC_Local_Addresses/FeatureServer/7
   barrierPrefab: {fileID: 8404250439825082080, guid: 5e3257cd06cf6154a8441fdb3c918d05, type: 3}
   img: {fileID: 0}
 --- !u!4 &421950650
@@ -338,6 +340,7 @@ MonoBehaviour:
   Enemies: []
   Objectives: []
   objects: 0
+  IncursionReady: 0
 --- !u!4 &437733216
 Transform:
   m_ObjectHideFlags: 0
